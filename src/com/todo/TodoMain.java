@@ -39,30 +39,37 @@ public class TodoMain {
 
 			case "ls_name_asc":
 				l.sortByName();
+				System.out.println("The list is sorted by name.");
 				isList = true;
 				break;
 
 			case "ls_name_desc":
 				l.sortByName();
 				l.reverseList();
+				System.out.println("The list is sorted by name - reversed.");
 				isList = true;
 				break;
 				
 			case "ls_date":
 				l.sortByDate();
+				System.out.println("The list is sorted by date.");
 				isList = true;
 				break;
 
+			case "help":
+				Menu.displaymenu();
+				break;
+				
 			case "exit":
 				quit = true;
 				break;
 
 			default:
-				System.out.println("please enter one of the above mentioned command");
+				System.out.println("Please enter the correct command (to diplay menu: [help])");
 				break;
 			}
 			
-			if(isList) l.listAll();
+			if(isList) TodoUtil.listAll(l);
 		} while (!quit);
 	}
 }
