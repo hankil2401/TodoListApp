@@ -1,5 +1,11 @@
 package com.todo.service;
 
+import java.io.BufferedReader;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.Writer;
 import java.util.*;
 
 import com.todo.dao.TodoItem;
@@ -85,6 +91,38 @@ public class TodoUtil {
 	public static void listAll(TodoList l) {
 		for (TodoItem item : l.getList()) {
 			System.out.println(item.toString());
+		}
+	}
+
+	public static void loadList(TodoList l, String filename) {
+		try {
+			BufferedReader br = new BufferedReader(new FileReader(filename));
+			String oneline;
+			while((oneline = br.readLine())!=null) {
+				StringTokenizer st = new StringTokenizer(oneline, "##");
+				String t = st.nextToken();
+				String td = st.nextToken();
+				String d = st.nextToken();
+				
+				TodoItem i = new TodoItem(t, td, d);
+				l.addItem(i);
+			}
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+
+	public static void saveList(TodoList l, String filename) {
+		try {
+			Writer w = new FileWriter(filename);
+			for(TodoItem item: l.getList()) {
+				w.write(item.toSaveString());
+			}
+			w.close();
+		} catch (IOException e) {
+			e.printStackTrace();
 		}
 	}
 }
