@@ -13,9 +13,11 @@ import com.todo.dao.TodoList;
 
 public class TodoUtil {
 	
+	private static int count=0;
+
 	public static void createItem(TodoList list) {
 		
-		String title, desc;
+		String title, desc, category, due_date;
 		Scanner sc = new Scanner(System.in);
 		
 		System.out.print("\n"
@@ -26,14 +28,18 @@ public class TodoUtil {
 			System.out.printf("The title is duplicated!!");
 			return;
 		}
-		
+		System.out.print("Category:    ");
+		category = sc.next();
 		sc.nextLine();
 		System.out.print("Description: ");
 		desc = sc.nextLine().trim();
+		System.out.print("Due date:    ");
+		due_date = sc.next();
 		
-		TodoItem t = new TodoItem(title, desc);
+		TodoItem t = new TodoItem(title, desc, category, due_date);
 		list.addItem(t);
 		System.out.println("New item added!");	
+		count++;
 	}
 
 	public static void deleteItem(TodoList l) {
@@ -42,13 +48,18 @@ public class TodoUtil {
 		
 		System.out.print("\n"
 				+ "<Delete Item from the list>\n"
-				+ "Removing Title: ");
-		String title = sc.next();
+				+ "Removing Title's number: ");
+		int no = sc.nextInt();
 		
-		for (TodoItem item : l.getList()) {
-			if (title.equals(item.getTitle())) {
-				l.deleteItem(item);
-				System.out.println("The Title is removed!");
+		for (int i=0; i<count; i++) {
+			if (no<=count && no>0) {
+				System.out.print("Are you sure you want to delete (y/n): ");
+				String yn = sc.next();
+				if(yn.equals("y")) {
+					l.deleteItem(l.getList().get(no-1));
+					System.out.println("The Title is removed!");
+					count--;
+				}
 				break;
 			}
 		}
@@ -61,35 +72,44 @@ public class TodoUtil {
 		
 		System.out.print("\n"
 				+ "<Change Item in the list>\n"
-				+ "Old Title:   ");
-		String title = sc.next().trim();
-		if (!l.isDuplicate(title)) {
-			System.out.println("The title doesn't exist!");
-			return;
-		}
+				+ "Old Title's number:   ");
+		int no = sc.nextInt();
+//		if (!l.isDuplicate(title)) {
+//			System.out.println("The title doesn't exist!");
+//			return;
+//		}
 
-		System.out.print("New Title:   ");
+		System.out.print("New Title:         ");
 		String new_title = sc.next().trim();
 		if (l.isDuplicate(new_title)) {
 			System.out.println("The title is duplicated!");
 			return;
 		}
+		System.out.print("New Category:    ");
+		String new_category = sc.next();
 		sc.nextLine();
-		System.out.print("Description: ");
+		System.out.print("Description:     ");
 		String new_description = sc.nextLine().trim();
-		for (TodoItem item : l.getList()) {
-			if (item.getTitle().equals(title)) {
-				l.deleteItem(item);
-				TodoItem t = new TodoItem(new_title, new_description);
+		System.out.print("New due date:    ");
+		String new_due_date = sc.next();
+		for (int i=0; i<count; i++) {
+			if (no<=count && no>0) {
+				l.deleteItem(l.getList().get(no-1));
+				TodoItem t = new TodoItem(new_title, new_description, new_category, new_due_date);
 				l.addItem(t);
 				System.out.println("The title is updated!");
+				break;
 			}
 		}
 
 	}
 
 	public static void listAll(TodoList l) {
+		System.out.println("<All List, "+count+" item(s) in total>");
+		int i=1;
 		for (TodoItem item : l.getList()) {
+			System.out.print(i+". ");
+			i++;
 			System.out.println(item.toString());
 		}
 	}
@@ -98,15 +118,19 @@ public class TodoUtil {
 		try {
 			BufferedReader br = new BufferedReader(new FileReader(filename));
 			String oneline;
+			count = 0;
 			while((oneline = br.readLine())!=null) {
 				StringTokenizer st = new StringTokenizer(oneline, "##");
+				String ct = st.nextToken();
 				String t = st.nextToken();
 				String td = st.nextToken();
-				String d = st.nextToken();
-				
-				TodoItem i = new TodoItem(t, td, d);
+				String dd = st.nextToken();
+				String cd = st.nextToken();
+				TodoItem i = new TodoItem(t, td, cd, ct, dd);
 				l.addItem(i);
+				count++;
 			}
+			System.out.println(count+" item(s) has been read!");
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 		} catch (IOException e) {
