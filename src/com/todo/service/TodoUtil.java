@@ -119,6 +119,7 @@ public class TodoUtil {
 	}
 	
 	public static void find(TodoList l, String str) {
+		int j=1;
 		for(int i=0; i<count; i++) {
 			TodoItem item = l.getList().get(i);
 			if(item.getCategory().toLowerCase().contains(str.toLowerCase()) 
@@ -126,18 +127,23 @@ public class TodoUtil {
 			|| item.getDesc().toLowerCase().contains(str.toLowerCase())) {
 				System.out.print(i+1+". ");
 				System.out.println(item.toString());
+				j++;
 			}
 		}
+		System.out.println("Found total of "+ j + " item(s).");
 	}
 	
 	public static void find_cate(TodoList l, String str) {
+		int j=1;
 		for(int i=0; i<count; i++) {
 			TodoItem item = l.getList().get(i);
 			if(item.getCategory().toLowerCase().contains(str.toLowerCase())) {
 				System.out.print(i+1+". ");
 				System.out.println(item.toString());
+				j++;
 			}
 		}
+		System.out.println("Found total of "+ j + " item(s) of this category.");
 	}
 	
 	public static void ls_cate(TodoList l) {
