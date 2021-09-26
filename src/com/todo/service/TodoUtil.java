@@ -53,6 +53,8 @@ public class TodoUtil {
 		
 		for (int i=0; i<count; i++) {
 			if (no<=count && no>0) {
+				System.out.print(no+". ");
+				System.out.println(l.getList().get(no-1).toString());
 				System.out.print("Are you sure you want to delete (y/n): ");
 				String yn = sc.next();
 				if(yn.equals("y")) {
@@ -74,12 +76,14 @@ public class TodoUtil {
 				+ "<Change Item in the list>\n"
 				+ "Old Title's number:   ");
 		int no = sc.nextInt();
+		System.out.print(no+". ");
+		System.out.println(l.getList().get(no-1).toString());
 //		if (!l.isDuplicate(title)) {
 //			System.out.println("The title doesn't exist!");
 //			return;
 //		}
 
-		System.out.print("New Title:         ");
+		System.out.print("New Title:       ");
 		String new_title = sc.next().trim();
 		if (l.isDuplicate(new_title)) {
 			System.out.println("The title is duplicated!");
@@ -97,7 +101,7 @@ public class TodoUtil {
 				l.deleteItem(l.getList().get(no-1));
 				TodoItem t = new TodoItem(new_title, new_description, new_category, new_due_date);
 				l.addItem(t);
-				System.out.println("The title is updated!");
+				System.out.println("The item is updated!");
 				break;
 			}
 		}
@@ -112,6 +116,45 @@ public class TodoUtil {
 			i++;
 			System.out.println(item.toString());
 		}
+	}
+	
+	public static void find(TodoList l, String str) {
+		for(int i=0; i<count; i++) {
+			TodoItem item = l.getList().get(i);
+			if(item.getCategory().toLowerCase().contains(str.toLowerCase()) 
+			|| item.getTitle().toLowerCase().contains(str.toLowerCase())
+			|| item.getDesc().toLowerCase().contains(str.toLowerCase())) {
+				System.out.print(i+1+". ");
+				System.out.println(item.toString());
+			}
+		}
+	}
+	
+	public static void find_cate(TodoList l, String str) {
+		for(int i=0; i<count; i++) {
+			TodoItem item = l.getList().get(i);
+			if(item.getCategory().toLowerCase().contains(str.toLowerCase())) {
+				System.out.print(i+1+". ");
+				System.out.println(item.toString());
+			}
+		}
+	}
+	
+	public static void ls_cate(TodoList l) {
+		HashSet<String> set = new HashSet<>();
+		for (TodoItem item : l.getList()) {
+			set.add(item.getCategory());
+        }
+		Iterator<String> itr=set.iterator();  
+		int i=1;
+		for(String cate : set) {
+			System.out.print(itr.next());
+			if(itr.hasNext()) {
+				i++;
+				System.out.print(" / ");
+			}
+		}
+		System.out.println("\nTotal of "+ i + " categories are registered.");
 	}
 
 	public static void loadList(TodoList l, String filename) {
